@@ -4,534 +4,70 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Quiz Educacional - GitHub Integrado</title>
-  <meta name="description" content="Quiz educacional com armazenamento automático no GitHub e dashboard em tempo real." />
+  <meta name="description" content="Quiz educacional com QR Code e armazenamento de resultados (GitHub ou local), com dashboard imediato." />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'><text y='1em' font-size='96'>🎓</text></svg>">
-  
-  <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  
   <style>
     :root {
-      /* Cores Base */
-      --bg-primary: #f8fafc;
-      --bg-secondary: #f1f5f9;
-      --bg-card: #ffffff;
-      
-      /* Cores de Texto */
-      --text-primary: #334155;
-      --text-secondary: #64748b;
-      --text-muted: #94a3b8;
-      
-      /* Cores de Destaque */
-      --color-primary: #3b82f6;
-      --color-primary-light: #bfdbfe;
-      --color-secondary: #10b981;
-      --color-secondary-light: #bbf7d0;
-      
-      /* Cores de Estado */
-      --color-success: #16a34a;
-      --color-success-light: #dcfce7;
-      --color-warning: #d97706;
-      --color-warning-light: #fef3c7;
-      --color-error: #dc2626;
-      --color-error-light: #fecaca;
-      
-      /* Cores Especiais */
-      --color-purple: #8b5cf6;
-      --color-purple-light: #e9d5ff;
-      --color-pink-light: #fce7f3;
-      --color-orange-light: #fed7aa;
-      
-      /* Bordas e Sombras */
-      --border-color: #e2e8f0;
-      --border-focus: #3b82f6;
-      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-      
-      /* Gradientes */
-      --gradient-primary: linear-gradient(135deg, #bfdbfe 0%, #e9d5ff 100%);
-      --gradient-success: linear-gradient(135deg, #bbf7d0 0%, #dcfce7 100%);
-      --gradient-warning: linear-gradient(135deg, #fef3c7 0%, #fed7aa 100%);
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    html, body {
-      height: 100%;
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    }
-
-    body {
-      background: var(--bg-primary);
-      color: var(--text-primary);
-      line-height: 1.6;
-      padding: 1rem;
-      min-height: 100vh;
-    }
-
-    .app {
-      max-width: 1200px;
-      margin: 0 auto;
-      width: 100%;
-    }
-
-    /* Cards e Containers */
-    .card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: 16px;
-      padding: 1.5rem;
-      box-shadow: var(--shadow-md);
-      margin-bottom: 1rem;
-      transition: all 0.3s ease;
-    }
-
-    .card:hover {
-      box-shadow: var(--shadow-lg);
-      transform: translateY(-2px);
-    }
-
-    .card-gradient {
-      background: var(--gradient-primary);
-      border: none;
-    }
-
-    /* Typography */
-    h1 {
-      font-size: 2.5rem;
-      font-weight: 700;
-      color: var(--text-primary);
-      margin-bottom: 0.5rem;
-      background: linear-gradient(135deg, var(--color-primary), var(--color-purple));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    h2 {
-      font-size: 1.875rem;
-      font-weight: 600;
-      color: var(--text-primary);
-      margin-bottom: 1rem;
-    }
-
-    h3 {
-      font-size: 1.25rem;
-      font-weight: 600;
-      color: var(--text-primary);
-      margin-bottom: 0.75rem;
-    }
-
-    .text-muted {
-      color: var(--text-muted);
-      font-size: 0.875rem;
-    }
-
-    .text-secondary {
-      color: var(--text-secondary);
-    }
-
-    /* Layout */
-    .grid {
-      display: grid;
-      gap: 1rem;
-    }
-
-    .grid-2 {
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    }
-
-    .grid-3 {
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    }
-
-    .flex {
-      display: flex;
-      gap: 1rem;
-    }
-
-    .flex-center {
-      align-items: center;
-      justify-content: center;
-    }
-
-    .flex-between {
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .flex-wrap {
-      flex-wrap: wrap;
-    }
-
-    /* Botões */
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-      padding: 0.75rem 1.5rem;
-      border: none;
-      border-radius: 12px;
-      font-weight: 500;
-      font-size: 0.875rem;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      text-decoration: none;
-      min-height: 44px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .btn:hover {
-      transform: translateY(-1px);
-      box-shadow: var(--shadow-md);
-    }
-
-    .btn:active {
-      transform: translateY(0);
-    }
-
-    .btn-primary {
-      background: var(--color-primary);
-      color: white;
-    }
-
-    .btn-primary:hover {
-      background: #2563eb;
-    }
-
-    .btn-secondary {
-      background: var(--bg-secondary);
-      color: var(--text-primary);
-      border: 1px solid var(--border-color);
-    }
-
-    .btn-secondary:hover {
-      background: #e2e8f0;
-    }
-
-    .btn-success {
-      background: var(--color-success);
-      color: white;
-    }
-
-    .btn-success:hover {
-      background: #15803d;
-    }
-
-    .btn-warning {
-      background: var(--color-warning);
-      color: white;
-    }
-
-    .btn-warning:hover {
-      background: #b45309;
-    }
-
-    .btn-error {
-      background: var(--color-error);
-      color: white;
-    }
-
-    .btn-error:hover {
-      background: #b91c1c;
-    }
-
-    .btn-lg {
-      padding: 1rem 2rem;
-      font-size: 1rem;
-      min-height: 52px;
-    }
-
-    .btn-sm {
-      padding: 0.5rem 1rem;
-      font-size: 0.75rem;
-      min-height: 36px;
-    }
-
-    /* Inputs */
-    .input {
-      width: 100%;
-      padding: 0.75rem 1rem;
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      background: var(--bg-card);
-      color: var(--text-primary);
-      font-size: 0.875rem;
-      transition: all 0.2s ease;
-    }
-
-    .input:focus {
-      outline: none;
-      border-color: var(--border-focus);
-      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-    }
-
-    .input-group {
-      margin-bottom: 1rem;
-    }
-
-    .label {
-      display: block;
-      margin-bottom: 0.5rem;
-      font-weight: 500;
-      color: var(--text-primary);
-    }
-
-    /* Pills e Badges */
-    .pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.5rem 1rem;
-      background: var(--color-primary-light);
-      color: var(--color-primary);
-      border-radius: 999px;
-      font-size: 0.75rem;
-      font-weight: 500;
-      border: 1px solid rgba(59, 130, 246, 0.2);
-    }
-
-    .pill-success {
-      background: var(--color-success-light);
-      color: var(--color-success);
-      border-color: rgba(22, 163, 74, 0.2);
-    }
-
-    .pill-warning {
-      background: var(--color-warning-light);
-      color: var(--color-warning);
-      border-color: rgba(217, 119, 6, 0.2);
-    }
-
-    /* Progress Bar */
-    .progress {
-      width: 100%;
-      height: 8px;
-      background: var(--bg-secondary);
-      border-radius: 999px;
-      overflow: hidden;
-      position: relative;
-    }
-
-    .progress-bar {
-      height: 100%;
-      background: linear-gradient(90deg, var(--color-primary), var(--color-purple));
-      border-radius: 999px;
-      transition: width 0.3s ease;
-      position: relative;
-    }
-
-    .progress-bar::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-      animation: shimmer 2s infinite;
-    }
-
-    @keyframes shimmer {
-      0% { transform: translateX(-100%); }
-      100% { transform: translateX(100%); }
-    }
-
-    /* QR Code Container */
-    .qr-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 1.5rem;
-      background: var(--gradient-primary);
-      border-radius: 16px;
-      border: 2px dashed var(--color-primary);
-    }
-
-    .qr-code {
-      background: white;
-      padding: 1rem;
-      border-radius: 12px;
-      box-shadow: var(--shadow-md);
-      min-height: 200px;
-      min-width: 200px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    /* Quiz Options */
-    .quiz-option {
-      padding: 1rem 1.5rem;
-      border: 2px solid var(--border-color);
-      border-radius: 12px;
-      background: var(--bg-card);
-      cursor: pointer;
-      transition: all 0.2s ease;
-      margin-bottom: 0.75rem;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .quiz-option:hover {
-      border-color: var(--color-primary);
-      background: var(--color-primary-light);
-      transform: translateX(4px);
-    }
-
-    .quiz-option.correct {
-      border-color: var(--color-success);
-      background: var(--color-success-light);
-      color: var(--color-success);
-    }
-
-    .quiz-option.incorrect {
-      border-color: var(--color-error);
-      background: var(--color-error-light);
-      color: var(--color-error);
-    }
-
-    .quiz-option.selected {
-      border-color: var(--color-primary);
-      background: var(--color-primary-light);
-      color: var(--color-primary);
-    }
-
-    /* Animations */
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    @keyframes slideIn {
-      from { opacity: 0; transform: translateX(-20px); }
-      to { opacity: 1; transform: translateX(0); }
-    }
-
-    .fade-in {
-      animation: fadeIn 0.5s ease-out;
-    }
-
-    .slide-in {
-      animation: slideIn 0.3s ease-out;
-    }
-
-    /* Loading Spinner */
-    .spinner {
-      width: 20px;
-      height: 20px;
-      border: 2px solid rgba(255, 255, 255, 0.3);
-      border-top: 2px solid white;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-    }
-
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
-    /* Status Indicators */
-    .status-online {
-      color: var(--color-success);
-    }
-
-    .status-offline {
-      color: var(--color-error);
-    }
-
-    .status-loading {
-      color: var(--color-warning);
-    }
-
-    /* Table */
-    .table {
-      width: 100%;
-      border-collapse: collapse;
-      background: var(--bg-card);
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: var(--shadow-sm);
-    }
-
-    .table th,
-    .table td {
-      padding: 1rem;
-      text-align: left;
-      border-bottom: 1px solid var(--border-color);
-    }
-
-    .table th {
-      background: var(--bg-secondary);
-      font-weight: 600;
-      color: var(--text-primary);
-    }
-
-    .table tr:hover {
-      background: var(--bg-secondary);
-    }
-
-    /* Responsive */
-    @media (max-width: 768px) {
-      .app {
-        padding: 0.5rem;
-      }
-      
-      .card {
-        padding: 1rem;
-      }
-      
-      h1 {
-        font-size: 2rem;
-      }
-      
-      .grid-2,
-      .grid-3 {
-        grid-template-columns: 1fr;
-      }
-      
-      .flex {
-        flex-direction: column;
-      }
-      
-      .btn {
-        width: 100%;
-      }
-    }
-
-    /* Utility Classes */
-    .hidden {
-      display: none !important;
-    }
-
-    .text-center {
-      text-align: center;
-    }
-
-    .mb-1 { margin-bottom: 0.25rem; }
-    .mb-2 { margin-bottom: 0.5rem; }
-    .mb-3 { margin-bottom: 0.75rem; }
-    .mb-4 { margin-bottom: 1rem; }
-    .mb-6 { margin-bottom: 1.5rem; }
-
-    .mt-1 { margin-top: 0.25rem; }
-    .mt-2 { margin-top: 0.5rem; }
-    .mt-3 { margin-top: 0.75rem; }
-    .mt-4 { margin-top: 1rem; }
-    .mt-6 { margin-top: 1.5rem; }
-
-    .p-4 { padding: 1rem; }
-    .p-6 { padding: 1.5rem; }
-
-    .w-full { width: 100%; }
-    .h-full { height: 100%; }
+      --bg-primary:#f8fafc;--bg-secondary:#f1f5f9;--bg-card:#fff;--text-primary:#334155;--text-secondary:#64748b;--text-muted:#94a3b8;
+      --color-primary:#3b82f6;--color-primary-light:#bfdbfe;--color-secondary:#10b981;--color-secondary-light:#bbf7d0;
+      --color-success:#16a34a;--color-success-light:#dcfce7;--color-warning:#d97706;--color-warning-light:#fef3c7;--color-error:#dc2626;--color-error-light:#fecaca;
+      --color-purple:#8b5cf6;--color-purple-light:#e9d5ff;--border-color:#e2e8f0;--border-focus:#3b82f6;
+      --shadow-sm:0 1px 2px rgba(0,0,0,.05);--shadow-md:0 4px 6px rgba(0,0,0,.1);--shadow-lg:0 10px 15px rgba(0,0,0,.1);
+      --gradient-primary:linear-gradient(135deg,#bfdbfe 0%,#e9d5ff 100%);--gradient-success:linear-gradient(135deg,#bbf7d0 0%,#dcfce7 100%);--gradient-warning:linear-gradient(135deg,#fef3c7 0%,#fed7aa 100%);
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%;font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif}
+    body{background:var(--bg-primary);color:var(--text-primary);line-height:1.6;padding:1rem;min-height:100vh}
+    .app{max-width:1200px;margin:0 auto;width:100%}
+    .card{background:var(--bg-card);border:1px solid var(--border-color);border-radius:16px;padding:1.5rem;box-shadow:var(--shadow-md);margin-bottom:1rem;transition:all .3s ease}
+    .card:hover{box-shadow:var(--shadow-lg);transform:translateY(-2px)}
+    .card-gradient{background:var(--gradient-primary);border:none}
+    h1{font-size:2.2rem;font-weight:700;margin-bottom:.5rem;background:linear-gradient(135deg,var(--color-primary),var(--color-purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    h2{font-size:1.6rem;font-weight:600;margin-bottom:1rem}
+    h3{font-size:1.1rem;font-weight:600;margin-bottom:.75rem}
+    .text-muted{color:var(--text-muted);font-size:.875rem}
+    .text-secondary{color:var(--text-secondary)}
+    .grid{display:grid;gap:1rem}
+    .grid-2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+    .grid-3{grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}
+    .flex{display:flex;gap:1rem}
+    .flex-center{align-items:center;justify-content:center}
+    .flex-between{align-items:center;justify-content:space-between}
+    .flex-wrap{flex-wrap:wrap}
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;padding:.75rem 1.5rem;border:none;border-radius:12px;font-weight:500;font-size:.9rem;cursor:pointer;transition:all .2s ease;text-decoration:none;min-height:44px}
+    .btn:hover{transform:translateY(-1px);box-shadow:var(--shadow-md)}
+    .btn-primary{background:var(--color-primary);color:#fff}.btn-primary:hover{background:#2563eb}
+    .btn-secondary{background:var(--bg-secondary);color:var(--text-primary);border:1px solid var(--border-color)}.btn-secondary:hover{background:#e2e8f0}
+    .btn-success{background:var(--color-success);color:#fff}.btn-success:hover{background:#15803d}
+    .btn-warning{background:var(--color-warning);color:#fff}.btn-warning:hover{background:#b45309}
+    .btn-sm{padding:.5rem 1rem;font-size:.8rem;min-height:36px}
+    .input{width:100%;padding:.75rem 1rem;border:1px solid var(--border-color);border-radius:8px;background:var(--bg-card);font-size:.9rem}
+    .input:focus{outline:none;border-color:var(--border-focus);box-shadow:0 0 0 3px rgba(59,130,246,.1)}
+    .input-group{margin-bottom:1rem}
+    .label{display:block;margin-bottom:.5rem;font-weight:500}
+    .pill{display:inline-flex;align-items:center;gap:.5rem;padding:.5rem 1rem;background:var(--color-primary-light);color:var(--color-primary);border-radius:999px;font-size:.75rem;font-weight:500;border:1px solid rgba(59,130,246,.2)}
+    .pill-success{background:var(--color-success-light);color:var(--color-success);border-color:rgba(22,163,74,.2)}
+    .pill-warning{background:var(--color-warning-light);color:var(--color-warning);border-color:rgba(217,119,6,.2)}
+    .progress{width:100%;height:8px;background:var(--bg-secondary);border-radius:999px;overflow:hidden}
+    .progress-bar{height:100%;background:linear-gradient(90deg,var(--color-primary),var(--color-purple));border-radius:999px;transition:width .3s ease;position:relative}
+    .progress-bar::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.3),transparent);animation:shimmer 2s infinite}
+    @keyframes shimmer{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+    .qr-container{display:flex;flex-direction:column;align-items:center;padding:1.5rem;background:var(--gradient-primary);border-radius:16px;border:2px dashed var(--color-primary)}
+    .qr-code{background:#fff;padding:1rem;border-radius:12px;box-shadow:var(--shadow-md);min-height:200px;min-width:200px;display:flex;align-items:center;justify-content:center}
+    .quiz-option{padding:1rem 1.5rem;border:2px solid var(--border-color);border-radius:12px;background:var(--bg-card);cursor:pointer;transition:all .2s ease;margin-bottom:.75rem}
+    .quiz-option:hover{border-color:var(--color-primary);background:var(--color-primary-light);transform:translateX(4px)}
+    .quiz-option.selected{border-color:var(--color-primary);background:var(--color-primary-light);color:var(--color-primary)}
+    .fade-in{animation:fadeIn .5s ease-out}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+    .spinner{width:20px;height:20px;border:2px solid rgba(255,255,255,.3);border-top:2px solid #fff;border-radius:50%;animation:spin 1s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .status-online{color:var(--color-success)}.status-offline{color:var(--color-error)}.status-loading{color:var(--color-warning)}
+    .table{width:100%;border-collapse:collapse;background:var(--bg-card);border-radius:12px;overflow:hidden;box-shadow:var(--shadow-sm)}
+    .table th,.table td{padding:1rem;text-align:left;border-bottom:1px solid var(--border-color)}
+    .table th{background:var(--bg-secondary);font-weight:600}
+    .hidden{display:none!important}.text-center{text-align:center}
+    @media (max-width:768px){.btn{width:100%}.grid-2,.grid-3{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
@@ -540,1162 +76,421 @@
     <div id="config" class="fade-in">
       <div class="card card-gradient">
         <h1>🎓 Quiz Educacional - GitHub Integrado</h1>
-        <p class="text-secondary mb-4">
-          Configure sua integração com GitHub para armazenamento automático dos resultados.
-        </p>
-        
-        <div class="pill mb-4">
-          🔗 Conectado ao GitHub • 📊 Dados em Tempo Real • 🆓 Gratuito
-        </div>
+        <p class="text-secondary mb-4">Configure o repositório GitHub (ou use modo local). Resultados são salvos por arquivo JSON único por aluno.</p>
+        <div class="pill mb-4">🔗 Integração GitHub • 📊 Dashboard imediato • 📱 Mobile First</div>
       </div>
 
       <div class="card">
         <h3>⚙️ Configuração do Repositório GitHub</h3>
-        <p class="text-secondary mb-4">
-          Para que os resultados sejam salvos automaticamente, configure os dados do seu repositório GitHub:
-        </p>
-
+        <p class="text-secondary mb-4">Use um token <em>fine-grained</em> com acesso de escrita apenas ao repositório de resultados. O token ficará no navegador; troque-o após o quiz.</p>
         <div class="grid grid-2">
           <div class="input-group">
-            <label class="label" for="githubUser">
-              👤 Usuário GitHub
-            </label>
-            <input 
-              id="githubUser" 
-              class="input" 
-              placeholder="Ex.: prof-joao-silva" 
-              value=""
-            />
+            <label class="label" for="githubUser">👤 Usuário/Org GitHub</label>
+            <input id="githubUser" class="input" placeholder="ex.: tiagogsantos" />
           </div>
-
           <div class="input-group">
-            <label class="label" for="githubRepo">
-              📁 Nome do Repositório
-            </label>
-            <input 
-              id="githubRepo" 
-              class="input" 
-              placeholder="Ex.: quiz-fisica-moderna" 
-              value=""
-            />
+            <label class="label" for="githubRepo">📁 Repositório</label>
+            <input id="githubRepo" class="input" placeholder="ex.: quiz-fisica" />
           </div>
         </div>
-
-        <div class="input-group">
-          <label class="label" for="githubToken">
-            🔑 Token de Acesso (Opcional - para escrita automática)
-          </label>
-          <input 
-            id="githubToken" 
-            class="input" 
-            type="password"
-            placeholder="ghp_xxxxxxxxxxxxxxxxxxxx (deixe vazio para modo somente leitura)"
-          />
-          <p class="text-muted mt-1">
-            💡 Sem token: alunos salvam localmente, professor coleta manualmente<br>
-            🔑 Com token: salvamento automático no GitHub para todos
-          </p>
+        <div class="grid grid-2">
+          <div class="input-group">
+            <label class="label" for="githubBranch">🌿 Branch (padrão: main)</label>
+            <input id="githubBranch" class="input" placeholder="main" />
+          </div>
+          <div class="input-group">
+            <label class="label" for="githubToken">🔑 Token (opcional p/ escrita)</label>
+            <input id="githubToken" class="input" type="password" placeholder="ghp_********" />
+            <p class="text-muted mt-1">Sem token → modo leitura/local. Com token → salva em <code>resultados/AAAA-MM-DD/arquivo.json</code>.</p>
+          </div>
         </div>
-
         <div class="flex">
-          <button class="btn btn-primary btn-lg" id="btnConfigurar">
-            ✅ Configurar e Continuar
-          </button>
-          <button class="btn btn-secondary" id="btnModoLocal">
-            💻 Usar Modo Local (Sem GitHub)
-          </button>
-        </div>
-
-        <div class="mt-4 p-4" style="background: var(--color-primary-light); border-radius: 8px;">
-          <h4 style="color: var(--color-primary); margin-bottom: 0.5rem;">📚 Como Criar Token GitHub:</h4>
-          <ol style="font-size: 0.875rem; color: var(--text-secondary);">
-            <li>Acesse: GitHub → Settings → Developer settings → Personal access tokens</li>
-            <li>Clique em "Generate new token (classic)"</li>
-            <li>Marque: "repo" (Full control of private repositories)</li>
-            <li>Copie o token gerado e cole aqui</li>
-          </ol>
+          <button class="btn btn-primary" id="btnConfigurar">✅ Configurar e Continuar</button>
+          <button class="btn btn-secondary" id="btnModoLocal">💻 Usar Modo Local</button>
         </div>
       </div>
     </div>
 
     <!-- TELA INICIAL -->
     <div id="home" class="hidden fade-in">
-      <!-- Header Principal -->
       <div class="card card-gradient">
         <div class="flex flex-between flex-wrap">
-          <div style="flex: 2; min-width: 300px;">
+          <div style="flex:2;min-width:300px;">
             <div class="flex flex-wrap mb-3">
               <div class="pill">🎓 Quiz Educacional</div>
-              <div class="pill" id="statusGitHub">
-                <span class="status-loading">🔄</span> Verificando GitHub...
-              </div>
+              <div class="pill" id="statusGitHub"><span class="status-loading">🔄</span> Verificando GitHub...</div>
             </div>
-            <h1 id="quiz-title">Quiz de Física Moderna</h1>
-            <p class="text-secondary mb-4">
-              Sistema integrado com GitHub para coleta automática de resultados. 
-              Alunos fazem o quiz e dados são salvos automaticamente para análise do professor.
-            </p>
-            <div class="flex flex-wrap">
-              <div class="pill-success">✅ Salvamento Automático</div>
-              <div class="pill-success">📊 Dashboard em Tempo Real</div>
-              <div class="pill-success">📱 Mobile First</div>
+            <h2 id="quiz-title">Quiz de Física</h2>
+            <p class="text-secondary">Resultados são salvos automaticamente (GitHub ou local). O professor acessa o dashboard para análise imediata.</p>
+            <div class="flex flex-wrap" style="margin-top:.5rem">
+              <div class="pill-success">✅ Auto-save</div>
+              <div class="pill-success">📊 Dashboard</div>
+              <div class="pill-success">🧪 Sem backend</div>
             </div>
           </div>
-          <div style="flex: 1; min-width: 250px;">
+          <div style="flex:1;min-width:250px;">
             <div class="qr-container">
-              <div id="qrLink" class="qr-code">
-                <img id="qrImage" style="max-width: 180px; max-height: 180px;" />
-              </div>
-              <p class="text-muted text-center mt-2">
-                QR Code do Quiz
-              </p>
+              <div class="qr-code"><img id="qrImage" style="max-width:180px;max-height:180px" alt="QR"/></div>
+              <p class="text-muted text-center mt-2">QR Code do Quiz</p>
               <div class="flex mt-3">
-                <button class="btn btn-secondary btn-sm" id="btnQrLink">
-                  🔄 Atualizar
-                </button>
-                <button class="btn btn-secondary btn-sm" id="btnCopiarLink">
-                  📋 Copiar Link
-                </button>
+                <button class="btn btn-secondary btn-sm" id="btnQrLink">🔄 Atualizar</button>
+                <button class="btn btn-secondary btn-sm" id="btnCopiarLink">📋 Copiar Link</button>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Seção Principal -->
       <div class="grid grid-2">
-        <!-- Área do Aluno -->
-        <div class="card slide-in">
+        <div class="card">
           <h3>👨‍🎓 Área do Aluno</h3>
-          <p class="text-secondary mb-4">
-            Digite seu nome e faça o quiz. Seus resultados serão salvos automaticamente.
-          </p>
-          
+          <p class="text-secondary">Digite seu nome e inicie o quiz.</p>
           <div class="input-group">
-            <label class="label" for="alunoNome">
-              📝 Seu nome completo
-            </label>
-            <input 
-              id="alunoNome" 
-              class="input" 
-              placeholder="Ex.: Ana Silva Santos" 
-              maxlength="50"
-              required
-            />
+            <label class="label" for="alunoNome">📝 Seu nome completo</label>
+            <input id="alunoNome" class="input" maxlength="60" placeholder="Ex.: Ana Silva Santos" required />
           </div>
-
-          <div class="flex">
-            <button class="btn btn-success btn-lg" id="btnIniciar">
-              🚀 Iniciar Quiz
-            </button>
-          </div>
-
-          <div class="mt-4 p-4" style="background: var(--color-success-light); border-radius: 8px;">
-            <p class="text-secondary" style="font-size: 0.875rem;">
-              ✅ <strong>Automático:</strong> Ao terminar o quiz, seus resultados serão salvos automaticamente para o professor analisar.
-            </p>
-          </div>
+          <div class="flex"><button class="btn btn-success" id="btnIniciar">🚀 Iniciar Quiz</button></div>
+          <div class="text-muted" style="margin-top:1rem">Os dados gravados incluem nome, acertos, percentual, tempo e respostas por questão.</div>
         </div>
 
-        <!-- Área do Professor -->
-        <div class="card slide-in">
+        <div class="card">
           <h3>👩‍🏫 Área do Professor</h3>
-          <p class="text-secondary mb-4">
-            Acesse o dashboard para ver todos os resultados coletados automaticamente.
-          </p>
-
+          <p class="text-secondary">Abra o dashboard para ver os resultados coletados.</p>
           <div class="grid">
-            <button class="btn btn-primary btn-lg" id="btnDashboard">
-              📊 Dashboard de Análise
-            </button>
-            <button class="btn btn-secondary" id="btnConfigurarRepo">
-              ⚙️ Configurar Repositório
-            </button>
-            <button class="btn btn-warning" id="btnExportarDados">
-              📥 Exportar Todos os Dados
-            </button>
+            <button class="btn btn-primary" id="btnDashboard">📊 Dashboard de Análise</button>
+            <button class="btn btn-secondary" id="btnConfigurarRepo">⚙️ Reconfigurar</button>
+            <button class="btn btn-warning" id="btnExportarDados">📥 Exportar Dados</button>
           </div>
-
           <div class="mt-4">
-            <div class="flex flex-between">
-              <span class="text-secondary">Status da Conexão:</span>
-              <span id="connectionStatus" class="status-loading">🔄 Verificando...</span>
-            </div>
-            <div class="flex flex-between mt-2">
-              <span class="text-secondary">Resultados Coletados:</span>
-              <span id="resultadosCount" class="font-weight-bold">-</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Instruções -->
-      <div class="card">
-        <h3>📋 Como Funciona</h3>
-        <div class="grid grid-3">
-          <div class="p-4" style="background: var(--color-primary-light); border-radius: 8px;">
-            <h4 style="color: var(--color-primary); margin-bottom: 0.5rem;">1️⃣ Aluno Faz Quiz</h4>
-            <p class="text-secondary" style="font-size: 0.875rem;">
-              Aluno acessa via QR code ou link, responde as questões e finaliza automaticamente.
-            </p>
-          </div>
-          <div class="p-4" style="background: var(--color-success-light); border-radius: 8px;">
-            <h4 style="color: var(--color-success); margin-bottom: 0.5rem;">2️⃣ Dados Salvos</h4>
-            <p class="text-secondary" style="font-size: 0.875rem;">
-              Resultados são salvos automaticamente no GitHub com timestamp e detalhes completos.
-            </p>
-          </div>
-          <div class="p-4" style="background: var(--color-warning-light); border-radius: 8px;">
-            <h4 style="color: var(--color-warning); margin-bottom: 0.5rem;">3️⃣ Professor Analisa</h4>
-            <p class="text-secondary" style="font-size: 0.875rem;">
-              Dashboard mostra todos os resultados em tempo real com análises detalhadas.
-            </p>
+            <div class="flex flex-between"><span class="text-secondary">Status:</span><span id="connectionStatus" class="status-loading">🔄 Verificando...</span></div>
+            <div class="flex flex-between mt-2"><span class="text-secondary">Resultados Coletados:</span><span id="resultadosCount">-</span></div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- TELA DO QUIZ -->
+    <!-- QUIZ -->
     <div id="quiz" class="hidden">
       <div class="card">
         <div class="flex flex-between flex-wrap mb-4">
-          <div class="pill" id="meta">
-            📝 Questão <span id="qid">1</span> de <span id="qtotal">5</span>
-          </div>
-          <div class="flex" style="align-items: center; gap: 1rem;">
+          <div class="pill" id="meta">📝 Questão <span id="qid">1</span> de <span id="qtotal">5</span></div>
+          <div class="flex" style="align-items:center;gap:1rem">
             <span class="text-muted">Progresso:</span>
-            <div class="progress" style="width: 200px;">
-              <div class="progress-bar" id="prog" style="width: 0%"></div>
-            </div>
+            <div class="progress" style="width:200px"><div class="progress-bar" id="prog" style="width:0%"></div></div>
             <span class="text-muted" id="progText">0%</span>
           </div>
         </div>
-
-        <div class="card" style="background: var(--gradient-primary); border: none;">
+        <div class="card" style="background:var(--gradient-primary);border:none">
           <h2 id="qtext" class="mb-4">Carregando pergunta...</h2>
           <div id="olist" class="grid"></div>
         </div>
-
         <div class="flex mt-4">
-          <button class="btn btn-secondary" id="btnSair">
-            ← Voltar ao Início
-          </button>
-          <div id="autoSaveStatus" class="pill" style="margin-left: auto;">
-            💾 Salvamento automático ativo
-          </div>
+          <button class="btn btn-secondary" id="btnSair">← Voltar</button>
+          <div id="autoSaveStatus" class="pill" style="margin-left:auto">💾 Salvamento automático ativo</div>
         </div>
       </div>
     </div>
 
-    <!-- RESULTADO DO ALUNO -->
+    <!-- RESULTADO -->
     <div id="resultado" class="hidden">
       <div class="card card-gradient text-center">
         <h2 class="mb-4">🎉 Quiz Concluído!</h2>
         <div id="resumo" class="mb-6"></div>
-        
         <div class="card">
-          <h3 class="mb-4">✅ Resultado Salvo Automaticamente</h3>
-          <div id="saveStatus" class="mb-4">
-            <div class="flex flex-center">
-              <div class="spinner"></div>
-              <span class="ml-2">Salvando seus resultados...</span>
-            </div>
-          </div>
-          
-          <div class="grid grid-2">
-            <button class="btn btn-success" id="btnRefazer">
-              🔄 Fazer Novamente
-            </button>
-            <button class="btn btn-secondary" id="btnVoltar">
-              🏠 Voltar ao Início
-            </button>
-          </div>
+          <h3 class="mb-4">✅ Status do salvamento</h3>
+          <div id="saveStatus" class="mb-4"><div class="flex flex-center"><div class="spinner"></div><span class="ml-2">Salvando...</span></div></div>
+          <div class="grid grid-2"><button class="btn btn-success" id="btnRefazer">🔄 Fazer Novamente</button><button class="btn btn-secondary" id="btnVoltar">🏠 Início</button></div>
         </div>
       </div>
     </div>
 
-    <!-- DASHBOARD DO PROFESSOR -->
+    <!-- DASHBOARD -->
     <div id="dashboard" class="hidden">
       <div class="card card-gradient">
         <div class="flex flex-between flex-wrap mb-4">
           <h2>📊 Dashboard de Análise</h2>
-          <div class="flex">
-            <button class="btn btn-secondary" id="btnAtualizarDados">
-              🔄 Atualizar Dados
-            </button>
-            <button class="btn btn-secondary" id="btnFecharDashboard">
-              ← Voltar
-            </button>
-          </div>
+          <div class="flex"><button class="btn btn-secondary" id="btnAtualizarDados">🔄 Atualizar</button><button class="btn btn-secondary" id="btnFecharDashboard">← Voltar</button></div>
         </div>
-        
-        <div class="pill mb-4" id="lastUpdate">
-          🕒 Última atualização: Carregando...
-        </div>
+        <div class="pill mb-4" id="lastUpdate">🕒 Última atualização: -</div>
       </div>
 
-      <!-- Métricas Principais -->
       <div class="grid grid-3 mb-4">
-        <div class="card text-center" style="background: var(--gradient-success);">
-          <h3 style="color: var(--color-success);">👥 Total de Alunos</h3>
-          <div id="totalAlunos" style="font-size: 3rem; font-weight: bold; color: var(--color-success);">-</div>
-          <p class="text-muted">que fizeram o quiz</p>
-        </div>
-        <div class="card text-center" style="background: var(--gradient-primary);">
-          <h3 style="color: var(--color-primary);">📊 Média Geral</h3>
-          <div id="mediaGeral" style="font-size: 3rem; font-weight: bold; color: var(--color-primary);">-</div>
-          <p class="text-muted">de aproveitamento</p>
-        </div>
-        <div class="card text-center" style="background: var(--gradient-warning);">
-          <h3 style="color: var(--color-warning);">✅ Taxa de Aprovação</h3>
-          <div id="taxaAprovacao" style="font-size: 3rem; font-weight: bold; color: var(--color-warning);">-</div>
-          <p class="text-muted">acima de 70%</p>
-        </div>
+        <div class="card text-center" style="background:var(--gradient-success)"><h3 style="color:var(--color-success)">👥 Total de Alunos</h3><div id="totalAlunos" style="font-size:2.6rem;font-weight:bold;color:var(--color-success)">-</div><p class="text-muted">que fizeram o quiz</p></div>
+        <div class="card text-center" style="background:var(--gradient-primary)"><h3 style="color:var(--color-primary)">📊 Média Geral</h3><div id="mediaGeral" style="font-size:2.6rem;font-weight:bold;color:var(--color-primary)">-</div><p class="text-muted">de aproveitamento</p></div>
+        <div class="card text-center" style="background:var(--gradient-warning)"><h3 style="color:var(--color-warning)">✅ Taxa de Aprovação</h3><div id="taxaAprovacao" style="font-size:2.6rem;font-weight:bold;color:var(--color-warning)">-</div><p class="text-muted">≥ 70%</p></div>
       </div>
 
-      <!-- Tabela de Resultados -->
       <div class="card">
         <h3 class="mb-4">📋 Resultados Detalhados</h3>
-        <div style="overflow-x: auto;">
-          <table class="table" id="tabelaResultados">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>👤 Nome</th>
-                <th>✅ Acertos</th>
-                <th>📊 %</th>
-                <th>⏰ Data/Hora</th>
-                <th>🎯 Status</th>
-                <th>📈 Detalhes</th>
-              </tr>
-            </thead>
-            <tbody></tbody>
-          </table>
+        <div style="overflow-x:auto">
+          <table class="table" id="tabelaResultados"><thead><tr><th>#</th><th>👤 Nome</th><th>✅ Acertos</th><th>📊 %</th><th>⏰ Data/Hora</th><th>🎯 Status</th><th>📈 Detalhes</th></tr></thead><tbody></tbody></table>
         </div>
       </div>
 
-      <!-- Análise por Questão -->
-      <div class="card">
-        <h3 class="mb-4">📝 Análise por Questão</h3>
-        <div id="analiseQuestoes"></div>
-      </div>
-
-      <!-- Análise por Descritor -->
-      <div class="card">
-        <h3 class="mb-4">🏷️ Análise por Descritores</h3>
-        <div id="analiseDescritores"></div>
-      </div>
+      <div class="card"><h3 class="mb-4">📝 Análise por Questão</h3><div id="analiseQuestoes"></div></div>
+      <div class="card"><h3 class="mb-4">🏷️ Análise por Descritores</h3><div id="analiseDescritores"></div></div>
     </div>
   </div>
 
   <script>
-    // ===== CONFIGURAÇÃO E DADOS =====
-    
-    // Questões do Quiz (exemplo - pode ser personalizado)
-    let QUESTOES = [
-      {
-        id: 1,
-        texto: "Qual é a velocidade da luz no vácuo?",
-        opcoes: [
-          "300.000 km/s",
-          "299.792.458 m/s", 
-          "3 × 10⁸ m/s",
-          "Todas as alternativas estão corretas"
-        ],
-        correta: 3,
-        descritor: "D1 - Constantes físicas fundamentais",
-        competencia: "Compreender fenômenos físicos",
-        dificuldade: "Fácil",
-        tempo_estimado: 30
-      },
-      {
-        id: 2,
-        texto: "O que caracteriza o movimento retilíneo uniforme?",
-        opcoes: [
-          "Velocidade constante e aceleração zero",
-          "Velocidade variável e aceleração constante",
-          "Velocidade zero e aceleração constante",
-          "Velocidade e aceleração variáveis"
-        ],
-        correta: 0,
-        descritor: "D2 - Cinemática básica",
-        competencia: "Analisar movimentos",
-        dificuldade: "Médio",
-        tempo_estimado: 45
-      },
-      {
-        id: 3,
-        texto: "Segundo a Lei de Ohm, a resistência elétrica é:",
-        opcoes: [
-          "R = V × I",
-          "R = V / I",
-          "R = I / V", 
-          "R = V + I"
-        ],
-        correta: 1,
-        descritor: "D3 - Eletricidade básica",
-        competencia: "Aplicar leis físicas",
-        dificuldade: "Fácil",
-        tempo_estimado: 30
-      },
-      {
-        id: 4,
-        texto: "A energia cinética de um objeto é dada por:",
-        opcoes: [
-          "Ec = m × v",
-          "Ec = ½ × m × v",
-          "Ec = ½ × m × v²",
-          "Ec = m × v²"
-        ],
-        correta: 2,
-        descritor: "D4 - Energia mecânica",
-        competencia: "Aplicar conceitos energéticos",
-        dificuldade: "Médio",
-        tempo_estimado: 40
-      },
-      {
-        id: 5,
-        texto: "O princípio da conservação da energia afirma que:",
-        opcoes: [
-          "A energia pode ser criada mas não destruída",
-          "A energia pode ser destruída mas não criada",
-          "A energia não pode ser criada nem destruída, apenas transformada",
-          "A energia sempre aumenta em um sistema fechado"
-        ],
-        correta: 2,
-        descritor: "D5 - Conservação de energia",
-        competencia: "Compreender princípios fundamentais",
-        dificuldade: "Médio",
-        tempo_estimado: 50
-      }
+    // ===== CONFIG & DADOS =====
+    const QUESTOES = [
+      {id:1,texto:"Qual é a velocidade da luz no vácuo?",opcoes:["300.000 km/s","299.792.458 m/s","3 × 10⁸ m/s","Todas as alternativas estão corretas"],correta:3,descritor:"D1 - Constantes físicas",competencia:"Compreender fenômenos físicos",dificuldade:"Fácil",tempo_estimado:30},
+      {id:2,texto:"O que caracteriza o movimento retilíneo uniforme?",opcoes:["Velocidade constante e aceleração zero","Velocidade variável e aceleração constante","Velocidade zero e aceleração constante","Velocidade e aceleração variáveis"],correta:0,descritor:"D2 - Cinemática",competencia:"Analisar movimentos",dificuldade:"Médio",tempo_estimado:45},
+      {id:3,texto:"Segundo a Lei de Ohm, a resistência elétrica é:",opcoes:["R = V × I","R = V / I","R = I / V","R = V + I"],correta:1,descritor:"D3 - Eletricidade",competencia:"Aplicar leis físicas",dificuldade:"Fácil",tempo_estimado:30},
+      {id:4,texto:"A energia cinética de um objeto é dada por:",opcoes:["Ec = m × v","Ec = ½ × m × v","Ec = ½ × m × v²","Ec = m × v²"],correta:2,descritor:"D4 - Energia",competencia:"Conceitos energéticos",dificuldade:"Médio",tempo_estimado:40},
+      {id:5,texto:"O princípio da conservação da energia afirma que:",opcoes:["Pode ser criada mas não destruída","Pode ser destruída mas não criada","Não é criada nem destruída, apenas transformada","Sempre aumenta num sistema fechado"],correta:2,descritor:"D5 - Conservação",competencia:"Princípios fundamentais",dificuldade:"Médio",tempo_estimado:50}
     ];
 
-    // Estado do aplicativo
-    let estadoApp = {
-      telaAtual: 'config',
-      questaoAtual: 0,
-      respostas: [],
-      nomeAluno: '',
-      inicioQuiz: null,
-      fimQuiz: null,
-      githubConfig: {
-        user: '',
-        repo: '',
-        token: '',
-        configured: false
-      },
-      resultados: [],
-      modoLocal: false
+    const estadoApp = {
+      telaAtual:'config', questaoAtual:0, respostas:[], nomeAluno:'', inicioQuiz:null, fimQuiz:null,
+      githubConfig:{ user:'', repo:'', token:'', branch:'main', configured:false },
+      resultados:[], modoLocal:false
     };
 
-    // Utilitários
-    const $ = (id) => document.getElementById(id);
-    const $$ = (selector) => document.querySelectorAll(selector);
-    
-    const escapeHTML = (str) => {
-      return String(str).replace(/[&<>"']/g, (match) => {
-        const escape = {
-          '&': '&amp;',
-          '<': '&lt;',
-          '>': '&gt;',
-          '"': '&quot;',
-          "'": '&#39;'
-        };
-        return escape[match];
-      });
+    // ===== HELPERS =====
+    const $ = id => document.getElementById(id);
+    const $$ = sel => document.querySelectorAll(sel);
+    const escapeHTML = s => String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'}[m]));
+    const formatarTempo = seg => {const m=Math.floor(seg/60),s=seg%60;return `${m}:${String(s).padStart(2,'0')}`};
+    const gerarId = () => Date.now().toString(36)+Math.random().toString(36).slice(2);
+    const formatarData = ts => new Date(ts).toLocaleString('pt-BR');
+
+    // Base64 UTF-8 seguro (btoa não lida com acentos)
+    const toBase64 = obj => {
+      const json = typeof obj === 'string' ? obj : JSON.stringify(obj);
+      const bytes = new TextEncoder().encode(json);
+      let bin = '';
+      for (let i=0;i<bytes.length;i++) bin += String.fromCharCode(bytes[i]);
+      return btoa(bin);
     };
 
-    const formatarTempo = (segundos) => {
-      const mins = Math.floor(segundos / 60);
-      const secs = segundos % 60;
-      return `${mins}:${secs.toString().padStart(2, '0')}`;
+    const hojeISO = () => new Date().toISOString().slice(0,10); // AAAA-MM-DD
+
+    // ===== TELAS =====
+    const mostrarTela = (t) => {
+      ['config','home','quiz','resultado','dashboard'].forEach(id=>$(id).classList.add('hidden'));
+      $(t).classList.remove('hidden');$(t).classList.add('fade-in');estadoApp.telaAtual=t;
     };
 
-    const gerarId = () => {
-      return Date.now().toString(36) + Math.random().toString(36).substr(2);
-    };
+    // ===== GITHUB =====
+    const GH_HEADERS = (token) => ({
+      'Accept':'application/vnd.github+json',
+      ...(token?{'Authorization':`Bearer ${token}`}:{}),
+      'X-GitHub-Api-Version':'2022-11-28',
+      'Content-Type':'application/json'
+    });
 
-    const formatarData = (timestamp) => {
-      return new Date(timestamp).toLocaleString('pt-BR');
-    };
-
-    // ===== GERENCIAMENTO DE TELAS =====
-    
-    const mostrarTela = (tela) => {
-      // Esconder todas as telas
-      ['config', 'home', 'quiz', 'resultado', 'dashboard'].forEach(id => {
-        const elemento = $(id);
-        if (elemento) {
-          elemento.classList.add('hidden');
-        }
-      });
-      
-      // Mostrar tela solicitada
-      const telaElemento = $(tela);
-      if (telaElemento) {
-        telaElemento.classList.remove('hidden');
-        telaElemento.classList.add('fade-in');
-        estadoApp.telaAtual = tela;
-      }
-    };
-
-    // ===== INTEGRAÇÃO GITHUB =====
-    
     const configurarGitHub = () => {
-      const user = $('githubUser').value.trim();
-      const repo = $('githubRepo').value.trim();
-      const token = $('githubToken').value.trim();
-      
-      if (!user || !repo) {
-        alert('Por favor, preencha usuário e repositório GitHub.');
-        return;
-      }
-      
-      estadoApp.githubConfig = {
-        user,
-        repo,
-        token,
-        configured: true
-      };
-      
-      // Salvar configuração localmente
-      localStorage.setItem('githubConfig', JSON.stringify(estadoApp.githubConfig));
-      
-      mostrarTela('home');
-      inicializarHome();
+      const user=$('githubUser').value.trim();
+      const repo=$('githubRepo').value.trim();
+      const token=$('githubToken').value.trim();
+      const branch=$('githubBranch').value.trim()||'main';
+      if(!user||!repo){alert('Preencha usuário e repositório.');return}
+      estadoApp.githubConfig={user,repo,token,branch,configured:true};
+      localStorage.setItem('githubConfig',JSON.stringify(estadoApp.githubConfig));
+      mostrarTela('home');inicializarHome();
     };
 
-    const usarModoLocal = () => {
-      estadoApp.modoLocal = true;
-      estadoApp.githubConfig.configured = false;
-      mostrarTela('home');
-      inicializarHome();
-    };
+    const usarModoLocal = () => {estadoApp.modoLocal=true;estadoApp.githubConfig.configured=false;mostrarTela('home');inicializarHome()};
 
     const verificarStatusGitHub = async () => {
-      if (estadoApp.modoLocal) {
-        $('statusGitHub').innerHTML = '<span class="status-offline">💻</span> Modo Local';
-        $('connectionStatus').innerHTML = '<span class="status-offline">💻 Modo Local</span>';
-        return;
-      }
-      
-      if (!estadoApp.githubConfig.configured) {
-        $('statusGitHub').innerHTML = '<span class="status-offline">❌</span> Não Configurado';
-        $('connectionStatus').innerHTML = '<span class="status-offline">❌ Não Configurado</span>';
-        return;
-      }
-      
-      try {
-        const response = await fetch(`https://api.github.com/repos/${estadoApp.githubConfig.user}/${estadoApp.githubConfig.repo}`);
-        
-        if (response.ok) {
-          $('statusGitHub').innerHTML = '<span class="status-online">✅</span> Conectado';
-          $('connectionStatus').innerHTML = '<span class="status-online">✅ Conectado</span>';
-        } else {
-          $('statusGitHub').innerHTML = '<span class="status-offline">❌</span> Repositório não encontrado';
-          $('connectionStatus').innerHTML = '<span class="status-offline">❌ Repositório não encontrado</span>';
-        }
-      } catch (error) {
-        $('statusGitHub').innerHTML = '<span class="status-offline">❌</span> Erro de conexão';
-        $('connectionStatus').innerHTML = '<span class="status-offline">❌ Erro de conexão</span>';
-      }
+      if(estadoApp.modoLocal){$('statusGitHub').innerHTML='<span class="status-offline">💻</span> Modo Local';$('connectionStatus').innerHTML='<span class="status-offline">💻 Modo Local</span>';return}
+      if(!estadoApp.githubConfig.configured){$('statusGitHub').innerHTML='<span class="status-offline">❌</span> Não Configurado';$('connectionStatus').innerHTML='<span class="status-offline">❌ Não Configurado</span>';return}
+      try{
+        const {user,repo,token} = estadoApp.githubConfig;
+        const r = await fetch(`https://api.github.com/repos/${user}/${repo}`,{headers:GH_HEADERS(token)});
+        if(r.ok){$('statusGitHub').innerHTML='<span class="status-online">✅</span> Conectado';$('connectionStatus').innerHTML='<span class="status-online">✅ Conectado</span>'}
+        else{$('statusGitHub').innerHTML='<span class="status-offline">❌</span> Repositório não encontrado';$('connectionStatus').innerHTML='<span class="status-offline">❌ Repositório não encontrado</span>'}
+      }catch(e){$('statusGitHub').innerHTML='<span class="status-offline">❌</span> Erro de conexão';$('connectionStatus').innerHTML='<span class="status-offline">❌</span> Erro de conexão'}
     };
 
     const salvarResultadoGitHub = async (resultado) => {
-      if (estadoApp.modoLocal || !estadoApp.githubConfig.configured || !estadoApp.githubConfig.token) {
-        // Salvar localmente
-        salvarResultadoLocal(resultado);
-        return;
-      }
-      
-      try {
-        const fileName = `resultado-${Date.now()}-${resultado.nome.replace(/[^a-zA-Z0-9]/g, '-')}.json`;
-        const content = btoa(JSON.stringify(resultado, null, 2));
-        
-        const response = await fetch(`https://api.github.com/repos/${estadoApp.githubConfig.user}/${estadoApp.githubConfig.repo}/contents/resultados/${fileName}`, {
-          method: 'PUT',
-          headers: {
-            'Authorization': `token ${estadoApp.githubConfig.token}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            message: `Adicionar resultado: ${resultado.nome}`,
-            content: content
-          })
-        });
-        
-        if (response.ok) {
-          $('saveStatus').innerHTML = '<div style="color: var(--color-success);">✅ Resultado salvo no GitHub com sucesso!</div>';
-        } else {
-          throw new Error('Erro ao salvar no GitHub');
+      if(estadoApp.modoLocal || !estadoApp.githubConfig.configured || !estadoApp.githubConfig.token){salvarResultadoLocal(resultado);return}
+      try{
+        const {user,repo,token,branch} = estadoApp.githubConfig;
+        const dateDir = hojeISO();
+        const safeName = resultado.nome.replace(/[^a-zA-Z0-9-_]/g,'-').slice(0,40)||'aluno';
+        const fileName = `resultado-${Date.now()}-${safeName}.json`;
+        const path = `resultados/${dateDir}/${fileName}`;
+        const body = {message:`add: ${resultado.nome} (${resultado.percentual}%)`, content: toBase64(resultado), branch};
+        const url = `https://api.github.com/repos/${user}/${repo}/contents/${encodeURIComponent(path)}`;
+        const res = await fetch(url,{method:'PUT',headers:GH_HEADERS(token),body:JSON.stringify(body)});
+        if(res.ok){$('saveStatus').innerHTML='<div style="color:var(--color-success)">✅ Salvo no GitHub!</div>'}
+        else{
+          const txt = await res.text();
+          console.error('Falha GitHub:',res.status,txt);
+          $('saveStatus').innerHTML='<div style="color:var(--color-warning)">⚠️ Falha ao salvar no GitHub, usando armazenamento local.</div>';
+          salvarResultadoLocal(resultado);
         }
-      } catch (error) {
-        console.error('Erro ao salvar no GitHub:', error);
-        $('saveStatus').innerHTML = '<div style="color: var(--color-warning);">⚠️ Erro no GitHub, salvando localmente...</div>';
+      }catch(err){
+        console.error('Erro GitHub:',err);
+        $('saveStatus').innerHTML='<div style="color:var(--color-warning)">⚠️ Erro de rede, salvando localmente.</div>';
         salvarResultadoLocal(resultado);
       }
     };
 
     const salvarResultadoLocal = (resultado) => {
-      const resultados = JSON.parse(localStorage.getItem('quizResultados') || '[]');
-      resultados.push(resultado);
-      localStorage.setItem('quizResultados', JSON.stringify(resultados));
-      $('saveStatus').innerHTML = '<div style="color: var(--color-success);">✅ Resultado salvo localmente!</div>';
+      const arr = JSON.parse(localStorage.getItem('quizResultados')||'[]');
+      arr.push(resultado);localStorage.setItem('quizResultados',JSON.stringify(arr));
+      $('saveStatus').innerHTML='<div style="color:var(--color-success)">✅ Salvo localmente!</div>';
     };
 
     const carregarResultados = async () => {
-      if (estadoApp.modoLocal || !estadoApp.githubConfig.configured) {
-        // Carregar resultados locais
-        const resultados = JSON.parse(localStorage.getItem('quizResultados') || '[]');
-        estadoApp.resultados = resultados;
-        return resultados;
-      }
-      
-      try {
-        const response = await fetch(`https://api.github.com/repos/${estadoApp.githubConfig.user}/${estadoApp.githubConfig.repo}/contents/resultados`);
-        
-        if (!response.ok) {
-          throw new Error('Pasta resultados não encontrada');
-        }
-        
-        const files = await response.json();
+      if(estadoApp.modoLocal || !estadoApp.githubConfig.configured){const local=JSON.parse(localStorage.getItem('quizResultados')||'[]');estadoApp.resultados=local;return local}
+      try{
+        const {user,repo,token,branch} = estadoApp.githubConfig;
+        const base = `https://api.github.com/repos/${user}/${repo}/contents/resultados?ref=${encodeURIComponent(branch)}`;
+        const r = await fetch(base,{headers:GH_HEADERS(token)});
+        if(!r.ok){throw new Error('Pasta resultados não encontrada')}
+        const days = await r.json();
+        const arquivos = [];
+        for(const day of days){ if(day.type==='dir'){ // listar arquivos do dia
+            const r2 = await fetch(day.url,{headers:GH_HEADERS(token)});
+            if(r2.ok){ const files = await r2.json(); arquivos.push(...files.filter(f=>f.name.endsWith('.json'))); }
+        }}
         const resultados = [];
-        
-        for (const file of files) {
-          if (file.name.endsWith('.json')) {
-            try {
-              const fileResponse = await fetch(file.download_url);
-              const resultado = await fileResponse.json();
-              resultados.push(resultado);
-            } catch (error) {
-              console.error('Erro ao carregar arquivo:', file.name, error);
-            }
-          }
+        for(const f of arquivos){
+          try{
+            // tentar via download_url; se privado, usar contents API
+            if(f.download_url){ const rf = await fetch(f.download_url,{headers:GH_HEADERS(estadoApp.githubConfig.token)}); if(rf.ok){resultados.push(await rf.json()); continue} }
+            const rc = await fetch(f.url,{headers:GH_HEADERS(estadoApp.githubConfig.token)});
+            if(rc.ok){ const obj = await rc.json(); const decoded = JSON.parse(atob(obj.content)); resultados.push(decoded); }
+          }catch(e){console.warn('Erro lendo',f.name,e)}
         }
-        
-        estadoApp.resultados = resultados;
-        return resultados;
-      } catch (error) {
-        console.error('Erro ao carregar resultados do GitHub:', error);
-        // Fallback para resultados locais
-        const resultados = JSON.parse(localStorage.getItem('quizResultados') || '[]');
-        estadoApp.resultados = resultados;
-        return resultados;
-      }
+        estadoApp.resultados = resultados; return resultados;
+      }catch(e){ console.error('Erro ao carregar GitHub:',e); const local=JSON.parse(localStorage.getItem('quizResultados')||'[]'); estadoApp.resultados=local; return local; }
     };
 
-    // ===== FUNCIONALIDADES DE QR CODE =====
-    
-    const gerarQRCode = (elementoImg, texto, opcoes = {}) => {
-      if (!elementoImg) return;
-      
-      try {
-        const size = opcoes.size || 200;
-        const color = opcoes.color || '3b82f6';
-        const bgcolor = opcoes.bgcolor || 'ffffff';
-        
-        const url = `https://api.qrserver.com/v1/create-qr-code/?size=${size}x${size}&data=${encodeURIComponent(texto)}&color=${color}&bgcolor=${bgcolor}`;
-        
-        elementoImg.src = url;
-        elementoImg.alt = 'QR Code';
-        elementoImg.style.display = 'block';
-        
-        console.log('QR Code gerado com sucesso!');
-      } catch (error) {
-        console.error('Erro ao gerar QR Code:', error);
-        elementoImg.style.display = 'none';
-      }
-    };
+    // ===== QR CODE =====
+    const gerarQRCode = (img, texto, {size=200,color='3b82f6',bgcolor='ffffff'}={}) => { if(!img) return; img.src=`https://api.qrserver.com/v1/create-qr-code/?size=${size}x${size}&data=${encodeURIComponent(texto)}&color=${color}&bgcolor=${bgcolor}`; img.alt='QR Code'; };
+    const atualizarQRLink = () => gerarQRCode($('qrImage'), window.location.href, {size:180,color:'3b82f6'});
 
-    const atualizarQRLink = () => {
-      const url = window.location.href;
-      gerarQRCode($('qrImage'), url, {
-        size: 180,
-        color: '3b82f6'
-      });
-    };
-
-    // ===== FUNCIONALIDADES DO QUIZ =====
-    
+    // ===== QUIZ =====
     const iniciarQuiz = () => {
-      const nome = $('alunoNome').value.trim();
-      if (!nome) {
-        alert('Por favor, digite seu nome para continuar.');
-        $('alunoNome').focus();
-        return;
-      }
-      
-      estadoApp.nomeAluno = nome;
-      estadoApp.questaoAtual = 0;
-      estadoApp.respostas = [];
-      estadoApp.inicioQuiz = new Date();
-      
-      mostrarTela('quiz');
-      mostrarQuestao();
+      const nome=$('alunoNome').value.trim(); if(!nome){alert('Digite seu nome.');$('alunoNome').focus();return}
+      estadoApp.nomeAluno=nome; estadoApp.questaoAtual=0; estadoApp.respostas=[]; estadoApp.inicioQuiz=new Date();
+      mostrarTela('quiz'); mostrarQuestao();
     };
 
     const mostrarQuestao = () => {
-      const questao = QUESTOES[estadoApp.questaoAtual];
-      if (!questao) {
-        finalizarQuiz();
-        return;
-      }
-
-      // Atualizar interface
-      $('qid').textContent = estadoApp.questaoAtual + 1;
-      $('qtotal').textContent = QUESTOES.length;
-      $('qtext').textContent = questao.texto;
-      
-      // Atualizar barra de progresso
-      const progresso = ((estadoApp.questaoAtual) / QUESTOES.length) * 100;
-      $('prog').style.width = progresso + '%';
-      $('progText').textContent = Math.round(progresso) + '%';
-      
-      // Gerar opções
-      const olist = $('olist');
-      olist.innerHTML = '';
-      
-      questao.opcoes.forEach((opcao, index) => {
-        const div = document.createElement('div');
-        div.className = 'quiz-option slide-in';
-        div.style.animationDelay = (index * 0.1) + 's';
-        div.innerHTML = `
-          <div style="display: flex; align-items: center; gap: 1rem;">
-            <div style="width: 32px; height: 32px; border-radius: 50%; background: var(--color-primary-light); color: var(--color-primary); display: flex; align-items: center; justify-content: center; font-weight: bold;">
-              ${String.fromCharCode(65 + index)}
-            </div>
-            <div style="flex: 1;">${escapeHTML(opcao)}</div>
-          </div>
-        `;
-        
-        div.addEventListener('click', () => selecionarOpcao(index, div));
-        olist.appendChild(div);
-      });
+      const q=QUESTOES[estadoApp.questaoAtual]; if(!q){finalizarQuiz();return}
+      $('qid').textContent=estadoApp.questaoAtual+1; $('qtotal').textContent=QUESTOES.length; $('qtext').textContent=q.texto;
+      const progresso = (estadoApp.questaoAtual/QUESTOES.length)*100; $('prog').style.width=progresso+'%'; $('progText').textContent=Math.round(progresso)+'%';
+      const olist=$('olist'); olist.innerHTML='';
+      q.opcoes.forEach((op,idx)=>{ const div=document.createElement('div'); div.className='quiz-option fade-in'; div.style.animationDelay=(idx*0.06)+'s'; div.innerHTML=`<div style="display:flex;align-items:center;gap:1rem"><div style="width:32px;height:32px;border-radius:50%;background:var(--color-primary-light);color:var(--color-primary);display:flex;align-items:center;justify-content:center;font-weight:bold">${String.fromCharCode(65+idx)}</div><div style="flex:1">${escapeHTML(op)}</div></div>`; div.addEventListener('click',()=>selecionarOpcao(idx,div)); olist.appendChild(div); });
     };
 
-    const selecionarOpcao = (indice, elemento) => {
-      // Remover seleção anterior
-      $$('.quiz-option').forEach(opt => {
-        opt.classList.remove('selected');
-      });
-      
-      // Selecionar nova opção
-      elemento.classList.add('selected');
-      
-      // Salvar resposta
-      estadoApp.respostas[estadoApp.questaoAtual] = {
-        questao: estadoApp.questaoAtual,
-        resposta: indice,
-        tempo: new Date() - estadoApp.inicioQuiz,
-        correta: indice === QUESTOES[estadoApp.questaoAtual].correta
-      };
-      
-      // Auto-avançar após 1 segundo
-      setTimeout(() => {
-        proximaQuestao();
-      }, 1000);
+    const selecionarOpcao = (i, el) => {
+      $$('.quiz-option').forEach(o=>o.classList.remove('selected')); el.classList.add('selected');
+      estadoApp.respostas[estadoApp.questaoAtual] = { questao: estadoApp.questaoAtual, resposta: i, tempo: (new Date()-estadoApp.inicioQuiz), correta: i===QUESTOES[estadoApp.questaoAtual].correta };
+      setTimeout(()=>proximaQuestao(), 600);
     };
 
     const proximaQuestao = () => {
-      estadoApp.questaoAtual++;
-      
-      if (estadoApp.questaoAtual >= QUESTOES.length) {
-        finalizarQuiz();
-      } else {
-        mostrarQuestao();
-      }
+      estadoApp.questaoAtual++; (estadoApp.questaoAtual>=QUESTOES.length)?finalizarQuiz():mostrarQuestao();
     };
 
-    const finalizarQuiz = () => {
-      estadoApp.fimQuiz = new Date();
-      mostrarTela('resultado');
-      gerarResultado();
-      salvarResultadoAutomatico();
-    };
+    const finalizarQuiz = () => { estadoApp.fimQuiz=new Date(); mostrarTela('resultado'); gerarResultado(); salvarResultadoAutomatico(); };
 
-    // ===== GERAÇÃO DE RESULTADOS =====
-    
+    // ===== RESULTADOS =====
     const gerarResultado = () => {
-      const acertos = estadoApp.respostas.filter(r => r.correta).length;
-      const total = QUESTOES.length;
-      const percentual = Math.round((acertos / total) * 100);
-      const tempoTotal = Math.round((estadoApp.fimQuiz - estadoApp.inicioQuiz) / 1000);
-      
-      // Resumo principal
-      const resumo = $('resumo');
-      resumo.innerHTML = `
+      const acertos = estadoApp.respostas.filter(r=>r?.correta).length; const total=QUESTOES.length; const perc=Math.round((acertos/total)*100);
+      const tempo = Math.round((estadoApp.fimQuiz-estadoApp.inicioQuiz)/1000);
+      $('resumo').innerHTML = `
         <div class="grid grid-3 mb-4">
-          <div class="card text-center" style="background: var(--color-success-light);">
-            <h3 style="color: var(--color-success); margin-bottom: 0.5rem;">✅ Acertos</h3>
-            <div style="font-size: 2.5rem; font-weight: bold; color: var(--color-success);">${acertos}</div>
-            <p class="text-muted">de ${total} questões</p>
-          </div>
-          <div class="card text-center" style="background: var(--color-primary-light);">
-            <h3 style="color: var(--color-primary); margin-bottom: 0.5rem;">📊 Percentual</h3>
-            <div style="font-size: 2.5rem; font-weight: bold; color: var(--color-primary);">${percentual}%</div>
-            <p class="text-muted">de aproveitamento</p>
-          </div>
-          <div class="card text-center" style="background: var(--color-warning-light);">
-            <h3 style="color: var(--color-warning); margin-bottom: 0.5rem;">⏱️ Tempo</h3>
-            <div style="font-size: 2.5rem; font-weight: bold; color: var(--color-warning);">${formatarTempo(tempoTotal)}</div>
-            <p class="text-muted">tempo total</p>
-          </div>
+          <div class="card text-center" style="background:var(--color-success-light)"><h3 style="color:var(--color-success);margin-bottom:.5rem">✅ Acertos</h3><div style="font-size:2.2rem;font-weight:bold;color:var(--color-success)">${acertos}</div><p class="text-muted">de ${total}</p></div>
+          <div class="card text-center" style="background:var(--color-primary-light)"><h3 style="color:var(--color-primary);margin-bottom:.5rem">📊 Percentual</h3><div style="font-size:2.2rem;font-weight:bold;color:var(--color-primary)">${perc}%</div><p class="text-muted">aproveitamento</p></div>
+          <div class="card text-center" style="background:var(--color-warning-light)"><h3 style="color:var(--color-warning);margin-bottom:.5rem">⏱️ Tempo</h3><div style="font-size:2.2rem;font-weight:bold;color:var(--color-warning)">${formatarTempo(tempo)}</div><p class="text-muted">total</p></div>
         </div>
-        
-        <div class="card" style="background: ${percentual >= 70 ? 'var(--color-success-light)' : 'var(--color-warning-light)'};">
-          <h3 style="color: ${percentual >= 70 ? 'var(--color-success)' : 'var(--color-warning)'};">
-            ${percentual >= 70 ? '🎉 Parabéns!' : '📚 Continue estudando!'}
-          </h3>
-          <p>
-            ${percentual >= 70 
-              ? `Excelente desempenho! Você demonstrou bom domínio do conteúdo.`
-              : `Você pode melhorar! Revise os tópicos e tente novamente.`
-            }
-          </p>
-        </div>
-      `;
-    };
-
-    const salvarResultadoAutomatico = () => {
-      const acertos = estadoApp.respostas.filter(r => r.correta).length;
-      const total = QUESTOES.length;
-      const percentual = Math.round((acertos / total) * 100);
-      
-      const resultado = {
-        id: gerarId(),
-        nome: estadoApp.nomeAluno,
-        score: acertos,
-        total: total,
-        percentual: percentual,
-        tempo_total: Math.round((estadoApp.fimQuiz - estadoApp.inicioQuiz) / 1000),
-        timestamp: estadoApp.fimQuiz.toISOString(),
-        respostas: estadoApp.respostas,
-        questoes: QUESTOES,
-        analise_descritores: gerarAnaliseDescritores()
-      };
-      
-      salvarResultadoGitHub(resultado);
+        <div class="card" style="background:${perc>=70?'var(--color-success-light)':'var(--color-warning-light)'}"><h3 style="color:${perc>=70?'var(--color-success)':'var(--color-warning)'}">${perc>=70?'🎉 Parabéns!':'📚 Continue estudando!'}</h3><p>${perc>=70?'Bom domínio do conteúdo.':'Revise os tópicos e tente novamente.'}</p></div>`;
     };
 
     const gerarAnaliseDescritores = () => {
-      const analise = {};
-      estadoApp.respostas.forEach((resposta, index) => {
-        const questao = QUESTOES[index];
-        const descritor = questao.descritor;
-        
-        if (!analise[descritor]) {
-          analise[descritor] = {
-            total: 0,
-            acertos: 0,
-            competencia: questao.competencia,
-            dificuldade: questao.dificuldade
-          };
-        }
-        
-        analise[descritor].total++;
-        if (resposta.correta) {
-          analise[descritor].acertos++;
-        }
-      });
-      
-      return analise;
+      const a={}; estadoApp.respostas.forEach((r,idx)=>{ const q=QUESTOES[idx]; const d=q.descritor; if(!a[d]) a[d]={total:0,acertos:0,competencia:q.competencia,dificuldade:q.dificuldade}; a[d].total++; if(r?.correta) a[d].acertos++; }); return a;
     };
 
-    // ===== DASHBOARD DO PROFESSOR =====
-    
-    const abrirDashboard = async () => {
-      mostrarTela('dashboard');
-      $('lastUpdate').textContent = '🕒 Carregando dados...';
-      
-      await carregarResultados();
-      atualizarDashboard();
+    const salvarResultadoAutomatico = () => {
+      const acertos = estadoApp.respostas.filter(r=>r?.correta).length; const total=QUESTOES.length; const perc=Math.round((acertos/total)*100);
+      const resultado = { id:gerarId(), nome:estadoApp.nomeAluno, score:acertos, total, percentual:perc, tempo_total:Math.round((estadoApp.fimQuiz-estadoApp.inicioQuiz)/1000), timestamp:estadoApp.fimQuiz.toISOString(), respostas:estadoApp.respostas, questoes:QUESTOES, analise_descritores: gerarAnaliseDescritores() };
+      salvarResultadoGitHub(resultado);
     };
+
+    // ===== DASHBOARD =====
+    const abrirDashboard = async () => { mostrarTela('dashboard'); $('lastUpdate').textContent='🕒 Carregando...'; await carregarResultados(); atualizarDashboard(); autoRefreshDashboard(); };
 
     const atualizarDashboard = () => {
-      const resultados = estadoApp.resultados;
-      
-      if (resultados.length === 0) {
-        $('totalAlunos').textContent = '0';
-        $('mediaGeral').textContent = '-';
-        $('taxaAprovacao').textContent = '-';
-        $('lastUpdate').textContent = '🕒 Nenhum resultado encontrado';
-        return;
-      }
-      
-      // Métricas principais
-      const totalAlunos = resultados.length;
-      const mediaGeral = Math.round(resultados.reduce((acc, r) => acc + r.percentual, 0) / totalAlunos);
-      const aprovados = resultados.filter(r => r.percentual >= 70).length;
-      const taxaAprovacao = Math.round((aprovados / totalAlunos) * 100);
-      
-      $('totalAlunos').textContent = totalAlunos;
-      $('mediaGeral').textContent = mediaGeral + '%';
-      $('taxaAprovacao').textContent = taxaAprovacao + '%';
-      $('resultadosCount').textContent = totalAlunos;
-      
-      // Atualizar tabela
-      atualizarTabelaResultados(resultados);
-      
-      // Análises
-      gerarAnaliseQuestoes(resultados);
-      gerarAnaliseDescritoresDashboard(resultados);
-      
-      $('lastUpdate').textContent = `🕒 Última atualização: ${formatarData(Date.now())}`;
+      const rs = estadoApp.resultados || [];
+      if(rs.length===0){$('totalAlunos').textContent='0';$('mediaGeral').textContent='-';$('taxaAprovacao').textContent='-';$('lastUpdate').textContent='🕒 Nenhum resultado'; atualizarTabelaResultados([]); $('analiseQuestoes').innerHTML=''; $('analiseDescritores').innerHTML=''; return}
+      const n = rs.length; const media = Math.round(rs.reduce((acc,r)=>acc+(r.percentual||0),0)/n); const aprov = rs.filter(r=>r.percentual>=70).length; const taxa = Math.round((aprov/n)*100);
+      $('totalAlunos').textContent=n; $('mediaGeral').textContent=media+'%'; $('taxaAprovacao').textContent=taxa+'%'; $('resultadosCount').textContent=n; $('lastUpdate').textContent=`🕒 Última atualização: ${formatarData(Date.now())}`;
+      atualizarTabelaResultados(rs); gerarAnaliseQuestoes(rs); gerarAnaliseDescritoresDashboard(rs);
     };
 
-    const atualizarTabelaResultados = (resultados) => {
-      const tbody = $('tabelaResultados').querySelector('tbody');
-      tbody.innerHTML = '';
-      
-      resultados.sort((a, b) => b.percentual - a.percentual).forEach((resultado, index) => {
-        const tr = document.createElement('tr');
-        const status = resultado.percentual >= 70 ? 
-          '<span style="color: var(--color-success);">✅ Aprovado</span>' : 
-          '<span style="color: var(--color-warning);">📚 Recuperação</span>';
-        
-        tr.innerHTML = `
-          <td>${index + 1}</td>
-          <td>${escapeHTML(resultado.nome)}</td>
-          <td>${resultado.score}/${resultado.total}</td>
-          <td><strong>${resultado.percentual}%</strong></td>
-          <td>${formatarData(resultado.timestamp)}</td>
-          <td>${status}</td>
-          <td>
-            <button class="btn btn-sm btn-secondary" onclick="verDetalhes('${resultado.id}')">
-              👁️ Ver
-            </button>
-          </td>
-        `;
-        
-        tbody.appendChild(tr);
+    const atualizarTabelaResultados = (rs) => {
+      const tbody = $('tabelaResultados').querySelector('tbody'); tbody.innerHTML='';
+      [...rs].sort((a,b)=>b.percentual-a.percentual).forEach((r,i)=>{
+        const tr=document.createElement('tr'); const status = r.percentual>=70?'<span style="color:var(--color-success)">✅ Aprovado</span>':'<span style="color:var(--color-warning)">📚 Recuperação</span>';
+        tr.innerHTML = `<td>${i+1}</td><td>${escapeHTML(r.nome)}</td><td>${r.score}/${r.total}</td><td><strong>${r.percentual}%</strong></td><td>${formatarData(r.timestamp)}</td><td>${status}</td><td><button class="btn btn-sm btn-secondary" onclick="verDetalhes('${r.id}')">👁️ Ver</button></td>`; tbody.appendChild(tr);
       });
     };
 
-    const gerarAnaliseQuestoes = (resultados) => {
-      if (resultados.length === 0) return;
-      
-      const analise = {};
-      
-      // Inicializar análise
-      QUESTOES.forEach(questao => {
-        analise[questao.id] = {
-          texto: questao.texto,
-          descritor: questao.descritor,
-          total_respostas: 0,
-          acertos: 0,
-          percentual_acerto: 0
-        };
-      });
-      
-      // Processar resultados
-      resultados.forEach(resultado => {
-        resultado.respostas.forEach((resposta, index) => {
-          const questaoId = QUESTOES[index].id;
-          analise[questaoId].total_respostas++;
-          if (resposta.correta) {
-            analise[questaoId].acertos++;
-          }
-        });
-      });
-      
-      // Calcular percentuais
-      Object.values(analise).forEach(item => {
-        if (item.total_respostas > 0) {
-          item.percentual_acerto = Math.round((item.acertos / item.total_respostas) * 100);
-        }
-      });
-      
-      // Renderizar
-      const container = $('analiseQuestoes');
-      let html = '';
-      
-      Object.values(analise).forEach(item => {
-        const cor = item.percentual_acerto >= 70 ? 'var(--color-success)' : 
-                   item.percentual_acerto >= 50 ? 'var(--color-warning)' : 'var(--color-error)';
-        
-        html += `
-          <div class="mb-3 p-3" style="background: var(--bg-secondary); border-radius: 8px; border-left: 4px solid ${cor};">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-              <div style="flex: 1;">
-                <div style="font-weight: 500;">${item.texto.substring(0, 80)}...</div>
-                <div style="font-size: 0.875rem; color: var(--text-muted);">${item.descritor}</div>
-              </div>
-              <div style="text-align: right;">
-                <div style="font-size: 1.5rem; font-weight: bold; color: ${cor};">${item.percentual_acerto}%</div>
-                <div style="font-size: 0.75rem; color: var(--text-muted);">${item.acertos}/${item.total_respostas} acertos</div>
-              </div>
-            </div>
-          </div>
-        `;
-      });
-      
-      container.innerHTML = html;
+    const gerarAnaliseQuestoes = (rs) => {
+      if(rs.length===0) return; const a={}; QUESTOES.forEach(q=>a[q.id]={texto:q.texto,descritor:q.descritor,total_respostas:0,acertos:0,percentual_acerto:0});
+      rs.forEach(r=>r.respostas?.forEach((resp,idx)=>{ const id=QUESTOES[idx].id; a[id].total_respostas++; if(resp?.correta) a[id].acertos++; }));
+      Object.values(a).forEach(x=>{ if(x.total_respostas>0) x.percentual_acerto=Math.round((x.acertos/x.total_respostas)*100); });
+      const cont=$('analiseQuestoes'); cont.innerHTML = Object.values(a).map(item=>{ const cor=item.percentual_acerto>=70?'var(--color-success)':(item.percentual_acerto>=50?'var(--color-warning)':'var(--color-error)'); return `<div class="mb-3 p-3" style="background:var(--bg-secondary);border-radius:8px;border-left:4px solid ${cor}"><div style="display:flex;justify-content:space-between;align-items:center"><div style="flex:1"><div style="font-weight:500">${escapeHTML(item.texto).slice(0,80)}...</div><div class="text-muted" style="font-size:.85rem">${escapeHTML(item.descritor)}</div></div><div style="text-align:right"><div style="font-size:1.4rem;font-weight:bold;color:${cor}">${item.percentual_acerto}%</div><div class="text-muted" style="font-size:.8rem">${item.acertos}/${item.total_respostas} acertos</div></div></div></div>`; }).join('');
     };
 
-    const gerarAnaliseDescritoresDashboard = (resultados) => {
-      if (resultados.length === 0) return;
-      
-      const analise = {};
-      
-      resultados.forEach(resultado => {
-        if (resultado.analise_descritores) {
-          Object.entries(resultado.analise_descritores).forEach(([descritor, dados]) => {
-            if (!analise[descritor]) {
-              analise[descritor] = {
-                competencia: dados.competencia,
-                total_questoes: 0,
-                total_acertos: 0,
-                total_alunos: 0
-              };
-            }
-            
-            analise[descritor].total_questoes += dados.total;
-            analise[descritor].total_acertos += dados.acertos;
-            analise[descritor].total_alunos++;
-          });
-        }
-      });
-      
-      const container = $('analiseDescritores');
-      let html = '';
-      
-      Object.entries(analise).forEach(([descritor, dados]) => {
-        const percentual = Math.round((dados.total_acertos / dados.total_questoes) * 100);
-        const cor = percentual >= 70 ? 'var(--color-success)' : 
-                   percentual >= 50 ? 'var(--color-warning)' : 'var(--color-error)';
-        
-        html += `
-          <div class="mb-3 p-3" style="background: var(--bg-secondary); border-radius: 8px; border-left: 4px solid ${cor};">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-              <div style="flex: 1;">
-                <div style="font-weight: 500;">${descritor}</div>
-                <div style="font-size: 0.875rem; color: var(--text-muted);">${dados.competencia}</div>
-                <div style="font-size: 0.75rem; color: var(--text-muted);">${dados.total_alunos} alunos avaliados</div>
-              </div>
-              <div style="text-align: right;">
-                <div style="font-size: 1.5rem; font-weight: bold; color: ${cor};">${percentual}%</div>
-                <div style="font-size: 0.75rem; color: var(--text-muted);">${dados.total_acertos}/${dados.total_questoes} acertos</div>
-              </div>
-            </div>
-          </div>
-        `;
-      });
-      
-      container.innerHTML = html;
+    const gerarAnaliseDescritoresDashboard = (rs) => {
+      const a={}; rs.forEach(r=>{ if(r.analise_descritores){ for(const [d,dados] of Object.entries(r.analise_descritores)){ if(!a[d]) a[d]={competencia:dados.competencia,total_questoes:0,total_acertos:0,total_alunos:0}; a[d].total_questoes+=dados.total; a[d].total_acertos+=dados.acertos; a[d].total_alunos++; } } });
+      const cont=$('analiseDescritores'); cont.innerHTML = Object.entries(a).map(([d,x])=>{ const p=Math.round((x.total_acertos/x.total_questoes)*100)||0; const cor=p>=70?'var(--color-success)':(p>=50?'var(--color-warning)':'var(--color-error)'); return `<div class="mb-3 p-3" style="background:var(--bg-secondary);border-radius:8px;border-left:4px solid ${cor}"><div style="display:flex;justify-content:space-between;align-items:center"><div style="flex:1"><div style="font-weight:500">${escapeHTML(d)}</div><div class="text-muted" style="font-size:.85rem">${escapeHTML(x.competencia||'')}</div><div class="text-muted" style="font-size:.8rem">${x.total_alunos} alunos avaliados</div></div><div style="text-align:right"><div style="font-size:1.4rem;font-weight:bold;color:${cor}">${p}%</div><div class="text-muted" style="font-size:.8rem">${x.total_acertos}/${x.total_questoes} acertos</div></div></div></div>`; }).join('');
     };
 
-    // ===== FUNCIONALIDADES AUXILIARES =====
-    
-    const copiarLink = () => {
-      navigator.clipboard.writeText(window.location.href).then(() => {
-        alert('Link copiado para a área de transferência!');
-      }).catch(() => {
-        alert('Erro ao copiar link.');
-      });
+    // Exposto globalmente para o botão da tabela
+    window.verDetalhes = (id) => {
+      const r = (estadoApp.resultados||[]).find(x=>x.id===id); if(!r){alert('Resultado não encontrado.');return}
+      const linhas = r.respostas.map((resp,i)=>`Q${i+1}: ${resp?.correta?'✔️':'❌'} (resp=${String.fromCharCode(65+(resp?.resposta??-1))})`).join('\n');
+      alert(`Aluno: ${r.nome}\nPercentual: ${r.percentual}%\nTempo: ${r.tempo_total}s\n\nDetalhes:\n${linhas}`);
     };
 
-    const exportarTodosDados = () => {
-      const dados = {
-        configuracao: estadoApp.githubConfig,
-        questoes: QUESTOES,
-        resultados: estadoApp.resultados,
-        exportado_em: new Date().toISOString()
-      };
-      
-      const blob = new Blob([JSON.stringify(dados, null, 2)], { type: 'application/json' });
-      const link = document.createElement('a');
-      link.href = URL.createObjectURL(blob);
-      link.download = `quiz-dados-completos-${new Date().toISOString().split('T')[0]}.json`;
-      link.click();
-    };
+    // ===== AUXILIARES =====
+    const copiarLink = () => navigator.clipboard.writeText(window.location.href).then(()=>alert('Link copiado!')).catch(()=>alert('Erro ao copiar.'));
 
-    const inicializarHome = () => {
-      verificarStatusGitHub();
-      atualizarQRLink();
-      
-      // Carregar contagem de resultados
-      carregarResultados().then(resultados => {
-        $('resultadosCount').textContent = resultados.length;
-      });
-    };
+    const exportarTodosDados = async () => { await carregarResultados(); const dados={configuracao:estadoApp.githubConfig,questoes:QUESTOES,resultados:estadoApp.resultados,exportado_em:new Date().toISOString()}; const blob=new Blob([JSON.stringify(dados,null,2)],{type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=`quiz-dados-${hojeISO()}.json`; a.click(); };
 
-    // ===== EVENT LISTENERS =====
-    
+    const inicializarHome = () => { verificarStatusGitHub(); atualizarQRLink(); carregarResultados().then(rs=>{$('resultadosCount').textContent=rs.length;}); };
+
+    // Auto-refresh no dashboard (a cada 20 s enquanto aberto)
+    let refreshTimer=null; const autoRefreshDashboard=()=>{ if(refreshTimer) clearInterval(refreshTimer); refreshTimer=setInterval(async()=>{ if(estadoApp.telaAtual==='dashboard'){ await carregarResultados(); atualizarDashboard(); } },20000); };
+
+    // ===== EVENTOS =====
     const inicializarEventListeners = () => {
-      // Configuração
       $('btnConfigurar').addEventListener('click', configurarGitHub);
       $('btnModoLocal').addEventListener('click', usarModoLocal);
-      
-      // Botões principais
       $('btnIniciar').addEventListener('click', iniciarQuiz);
-      $('btnSair').addEventListener('click', () => mostrarTela('home'));
-      $('btnRefazer').addEventListener('click', () => {
-        mostrarTela('home');
-        $('alunoNome').value = '';
-      });
-      $('btnVoltar').addEventListener('click', () => mostrarTela('home'));
-      
-      // QR Code
+      $('btnSair').addEventListener('click', ()=>mostrarTela('home'));
+      $('btnRefazer').addEventListener('click', ()=>{ mostrarTela('home'); $('alunoNome').value=''; });
+      $('btnVoltar').addEventListener('click', ()=>mostrarTela('home'));
       $('btnQrLink').addEventListener('click', atualizarQRLink);
       $('btnCopiarLink').addEventListener('click', copiarLink);
-      
-      // Dashboard
       $('btnDashboard').addEventListener('click', abrirDashboard);
-      $('btnFecharDashboard').addEventListener('click', () => mostrarTela('home'));
-      $('btnAtualizarDados').addEventListener('click', atualizarDashboard);
-      
-      // Configurações
-      $('btnConfigurarRepo').addEventListener('click', () => mostrarTela('config'));
+      $('btnFecharDashboard').addEventListener('click', ()=>mostrarTela('home'));
+      $('btnAtualizarDados').addEventListener('click', async ()=>{ await carregarResultados(); atualizarDashboard(); });
+      $('btnConfigurarRepo').addEventListener('click', ()=>mostrarTela('config'));
       $('btnExportarDados').addEventListener('click', exportarTodosDados);
-      
-      // Teclas de atalho
-      document.addEventListener('keydown', (e) => {
-        if (estadoApp.telaAtual === 'quiz') {
-          const num = parseInt(e.key);
-          if (num >= 1 && num <= 4) {
-            const opcoes = $$('.quiz-option');
-            if (opcoes[num - 1]) {
-              opcoes[num - 1].click();
-            }
-          }
-        }
-      });
+      document.addEventListener('keydown', (e)=>{ if(estadoApp.telaAtual==='quiz'){ const n=parseInt(e.key); if(n>=1&&n<=4){ const ops=$$('.quiz-option'); if(ops[n-1]) ops[n-1].click(); } } });
     };
 
-    // ===== INICIALIZAÇÃO =====
-    
+    // ===== BOOT =====
     const inicializar = () => {
-      console.log('🎓 Quiz Educacional - GitHub Integrado - Inicializando...');
-      
-      // Carregar configuração salva
-      const configSalva = localStorage.getItem('githubConfig');
-      if (configSalva) {
-        try {
-          estadoApp.githubConfig = JSON.parse(configSalva);
-          if (estadoApp.githubConfig.configured) {
-            mostrarTela('home');
-            inicializarHome();
-          }
-        } catch (error) {
-          console.error('Erro ao carregar configuração:', error);
-        }
-      }
-      
-      // Configurar event listeners
+      const cfg = localStorage.getItem('githubConfig'); if(cfg){ try{ const c=JSON.parse(cfg); estadoApp.githubConfig={...estadoApp.githubConfig, ...c}; if(estadoApp.githubConfig.configured){ mostrarTela('home'); inicializarHome(); } }catch(e){ console.warn('Config inválida'); } }
       inicializarEventListeners();
-      
-      console.log('✅ Inicialização concluída!');
+      if(!estadoApp.githubConfig.configured) mostrarTela('config');
     };
-
-    // Aguardar carregamento completo da página
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', inicializar);
-    } else {
-      inicializar();
-    }
-
-    console.log('🚀 Quiz Educacional - GitHub Integrado carregado!');
+    if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', inicializar); else inicializar();
   </script>
 </body>
 </html>
+
 
